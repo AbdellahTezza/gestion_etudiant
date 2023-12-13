@@ -3,7 +3,7 @@
  // Error/Exception engine, always use E_ALL
  header('Content-Type: application/json');
  header('Access-Control-Allow-Origin: *');
-echo "master jjkjkj ";
+echo "";
 
 
 $result = array('error'=> false);
