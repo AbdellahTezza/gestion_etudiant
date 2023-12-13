@@ -4,7 +4,6 @@
  header('Content-Type: application/json');
  header('Access-Control-Allow-Origin: *');
 $result = array('error'=> false);
-// connection to my db 
 
 $host_name = "localhost";
 $host_user = "root";
