@@ -3,6 +3,8 @@
  // Error/Exception engine, always use E_ALL
  header('Content-Type: application/json');
  header('Access-Control-Allow-Origin: *');
+echo "master fhhfhfhfssssh";
+
 
 $result = array('error'=> false);
 // connection to my db 
