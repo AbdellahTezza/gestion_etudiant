@@ -270,7 +270,7 @@ export default {
                 console.log("Validated Sucessfully");
                 var formData = this.toFormData(this.newStudent);
                 let res = await axios.post(
-                    `http://localhost/project_vuejs/tutophpvuejs/src/api/students.php?action=add`,
+                    `../api/students.php?action=add`,
                     formData
                 );
             const restaData = res.data;
@@ -287,6 +287,7 @@ export default {
                 console.log("Not validated");
             }
         }
+        
         },
        async editUser() {
             this.v$.currentStudent.$validate()
@@ -368,7 +369,7 @@ export default {
             this.studentData = "";
         },
         async getStudentsData() {
-            let res = await axios.get("http://localhost/project_vuejs/tutophpvuejs/src/api/students.php?action=read");
+            let res = await axios.get("http://localhost:8080/src/api/students.php?action=read");
             const restaData = res.data;
             console.log(res.status);
             if (res.status == 200) {
