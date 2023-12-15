@@ -3,7 +3,7 @@
         <h1 class="text-center">CRUD PHP, VUE.JS 3 & MYSQL <span>By abdellah</span> </h1>
     </div>
     <div class="container" v-if="!isDBConneted">
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" v-if="connection_msg">
             {{ connection_msg }}
         </div>
     </div>
@@ -218,6 +218,7 @@ export default {
             editAddModal: false,
             deleteModal: false,
             alldelete: false,
+            // editModalDialog:false,
             //object
             newStudent: {
                 name: "",
@@ -263,52 +264,52 @@ export default {
         },
         async addNewUser() {
             this.v$.newStudent.$validate();
-            // console.log();
+
             if (!this.v$.newStudent.$error) {
-                this.editModalDialog(false);
                 this.clearOldmessage;
                 console.log("Validated Sucessfully");
                 var formData = this.toFormData(this.newStudent);
-                let res = await axios.post(
-                    `http://localhost/project_vuejs/tutophpvuejs/src/api/students.php?action=add`,
-                    formData
-                );
-            const restaData = res.data;
-            if (res.status == 200) {
-                if (restaData.error) {
-                    this.errMsg = "Erreur";
+                // var formData = this.toFormData(this.currentStudent);
+                let res = await axios.post(`https://adler1.sebourugs.com/api.php?action=add`, formData);
+                const restaData = res.data;
+                if (res.status == 200) {
+                    if (restaData.error) {
+                        this.errMsg = "Erreur";
+                    } else {
+                        this.newStudent = {name:"", email:"", phone: ""};
+                        // this.getStudentsData();
+                        // this.studentData = restaData.students;
+                        this.v$.newStudent.$reset();
+                        this.getStudentsData();
+                        this.addModalDialog(false);
+                        this.successMsg = "Susssuf ajouter";
+                    }
+
                 } else {
-                    this.newStudent = {name:"", email:"", phone: ""};
-                    // this.getStudentsData();
-                    this.studentData = restaData.students;
-                    this.v$.newStudent.$reset();
-                }
+                    console.log("Not validated");
+                }           
             } else {
                 console.log("Not validated");
             }
-        }
+        
         },
        async editUser() {
-            this.v$.currentStudent.$validate()
+            this.v$.currentStudent.$validate();
             // console.log();
             if (!this.v$.currentStudent.$error) {
                 this.editModalDialog(false);
                 this.clearOldmessage;
                 console.log("Validated Sucessfully");
                 var formData = this.toFormData(this.currentStudent);
-                let res = await axios.post(
-                    `http://localhost/project_vuejs/tutophpvuejs/src/api/students.php?action=update`,
-                    formData
-                );
-            const restaData = res.data;
+                let res = await axios.post(`https://adler1.sebourugs.com/api.php?action=update`, formData);
+                const restaData = res.data;
             if (res.status == 200) {
                 if (restaData.error) {
                     this.errMsg = "Erreur";
                 } else {
-
                     this.currentStudent = {};
-                    // this.getStudentsData();
-                    this.studentData = restaData.students;
+                    this.getStudentsData();
+                    // this.studentData = restaData.students;
                     this.v$.currentStudent.$reset();
                 }
             }
@@ -327,8 +328,9 @@ export default {
             this.successMsg = "Susssuf all delete";
             this.clearOldmessage;
             this.deleteModal = false;
+            this.DeleteAllstudent(false);
             this.toFormData(this.currentStudent);
-            let res = await axios.post("http://localhost/project_vuejs/tutophpvuejs/src/api/students.php?action=deleteAll");
+            let res = await axios.post("https://adler1.sebourugs.com/api.php?action=deleteAll");
             const restaData = res.data;
             if (res.status == 200) {
                 this.studentData = restaData.students;
@@ -345,8 +347,7 @@ export default {
             this.clearOldmessage;
             this.deleteModal = false;
             var formData = this.toFormData(this.currentStudent);
-            let res = await axios.post(
-                `http://localhost/project_vuejs/tutophpvuejs/src/api/students.php?action=delete`,
+            let res = await axios.post( `https://adler1.sebourugs.com/api.php?action=delete`,
                 formData
             );
             const restaData = res.data;
@@ -368,7 +369,7 @@ export default {
             this.studentData = "";
         },
         async getStudentsData() {
-            let res = await axios.get("http://localhost/project_vuejs/tutophpvuejs/src/api/students.php?action=read");
+            let res = await axios.get("https://adler1.sebourugs.com/api.php?action=read");
             const restaData = res.data;
             console.log(res.status);
             if (res.status == 200) {
@@ -382,7 +383,7 @@ export default {
             }
         },
         async dbConnection() {
-            let res = await axios.get("http://localhost/project_vuejs/tutophpvuejs/src/api/students.php");
+            let res = await axios.get("https://adler1.sebourugs.com/api.php");
             const restaData = res.data;
             this.isDBConneted = restaData.is_db_connected;
             this.connection_msg = restaData.connection_msg;
